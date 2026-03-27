@@ -38,35 +38,62 @@ function pickFirstAddressValue(
   return "";
 }
 
-export function normalizeLocationResult(
-  entry: NominatimEntry | null | undefined,
-  fallbackLabel = "",
-): SearchResult | null {
-  if (!entry || typeof entry !== "object") {
-    
-    return null;
-  }
+function inferContinentFromCountryCode(countryCode: string): string {
+  const code = countryCode.toUpperCase();
 
-  const lat = Number(entry.lat);
-  const lon = Number(entry.lon);
-  
-  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
-    return null;
-  }
+  if (
+    [
+      "US", "CA", "MX", "GT", "BZ", "SV", "HN", "NI", "CR", "PA",
+      "CU", "JM", "HT", "DO", "BS", "BB", "TT",
+    ].includes(code)
+  ) return "North America";
 
-  const label = String(
-    entry.display_name ?? entry.label ?? fallbackLabel,
-  ).trim();
-  if (!label) {
-    return null;
-  }
+  if (
+    [
+      "BR", "AR", "CL", "PE", "CO", "VE", "UY", "PY", "BO", "EC", "GY", "SR",
+    ].includes(code)
+  ) return "South America";
 
-const address = entry.address ?? {};
+  if (
+    [
+      "GB", "IE", "FR", "DE", "ES", "PT", "IT", "NL", "BE", "LU", "CH", "AT",
+      "DK", "NO", "SE", "FI", "IS", "PL", "CZ", "SK", "HU", "RO", "BG", "GR",
+      "HR", "SI", "BA", "RS", "ME", "MK", "AL", "MD", "UA", "BY", "LT", "LV",
+      "EE",
+    ].includes(code)
+  ) return "Europe";
+
+  if (
+    [
+      "JP", "CN", "KR", "KP", "TW", "HK", "MO", "VN", "TH", "KH", "LA", "MM",
+      "MY", "SG", "ID", "PH", "BN", "IN", "PK", "BD", "LK", "NP", "BT", "MN",
+      "KZ", "UZ", "TM", "KG", "TJ", "AF", "IR", "IQ", "SY", "JO", "LB", "IL",
+      "SA", "AE", "QA", "KW", "OM", "YE", "TR", "GE", "AM", "AZ",
+    ].includes(code)
+  ) return "Asia";
+
+  if (
+    [
+      "ZA", "NG", "EG", "DZ", "MA", "TN", "LY", "SD", "ET", "KE", "UG", "TZ",
+      "GH", "CI", "SN", "CM", "AO", "ZM", "ZW", "BW", "NA", "MZ", "MG",
+    ].includes(code)
+  ) return "Africa";
+
+  if (
+    [
+      "AU", "NZ", "PG", "FJ", "SB", "VU", "NC", "WS", "TO",
+    ].includes(code)
+  ) return "Oceania";
+
+  if (code === "AQ") return "Antarctica";
+
+  return "";
+}
 
 function pickBestLocality(
   address: Record<string, string>,
-  entry?: { city?: string }
-) {
+  entry?: { city?: string },
+): string {
   return (
     pickFirstAddressValue(address, [
       "city",
@@ -94,27 +121,60 @@ function pickBestLocality(
   );
 }
 
-const city = pickBestLocality(address, entry);
+function extractPrimaryName(label: string): string {
+  return label.split(",")[0]?.trim() ?? "";
+}
+export function normalizeLocationResult(
+  entry: NominatimEntry | null | undefined,
+  fallbackLabel = "",
+): SearchResult | null {
+  if (!entry || typeof entry !== "object") {
+    
+    return null;
+  }
+
+  const lat = Number(entry.lat);
+  const lon = Number(entry.lon);
+  
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+    return null;
+  }
+
+  const label = String(
+    entry.display_name ?? entry.label ?? fallbackLabel,
+  ).trim();
+  if (!label) {
+    return null;
+  }
+
+  const address = entry.address ?? {};
+  const primaryName = extractPrimaryName(label);
+
+  const city = pickBestLocality(address, entry);
   const country =
     pickFirstAddressValue(address, ["country"]) ||
     String(entry.country ?? "").trim();
- const rawCountryCode = pickFirstAddressValue(address, ["country_code"]);
-const countryCode = rawCountryCode ? rawCountryCode.toUpperCase() : "";
+
+  const rawCountryCode = pickFirstAddressValue(address, ["country_code"]);
+  const countryCode = rawCountryCode ? rawCountryCode.toUpperCase() : "";
+
   const continent =
     pickFirstAddressValue(address, ["continent"]) ||
+    inferContinentFromCountryCode(countryCode) ||
     inferContinentFromCoordinates(lat, lon);
 
   return {
-  id: String(entry.place_id ?? label),
-  label,
-  city,
-  country,
-  countryCode,
-  continent,
-  lat,
-  lon,
-  importance: Number(entry.importance ?? 0),
-};
+    id: String(entry.place_id ?? label),
+    label,
+    primaryName,
+    city,
+    country,
+    countryCode,
+    continent,
+    lat,
+    lon,
+    importance: Number(entry.importance ?? 0),
+  };
 }
 
 export function parseLocationResponseItems(
@@ -123,24 +183,30 @@ export function parseLocationResponseItems(
 ): SearchResult[] {
   const entries = Array.isArray(payload) ? (payload as NominatimEntry[]) : [];
   const suggestions: SearchResult[] = [];
-  const seenLabels = new Set<string>();
+  const seenKeys = new Set<string>();
+
 
   for (const entry of entries) {
-    const normalized = normalizeLocationResult(entry);
+    const normalized = normalizeLocationResult(entry,);
+    
     if (!normalized) {
+
+      
       continue;
     }
 
-    const labelKey = normalized.label.toLowerCase();
-    if (seenLabels.has(labelKey)) {
-      continue;
-    }
+const resultKey =
+  `${normalized.label}|${normalized.lat}|${normalized.lon}`.toLowerCase();
 
-    seenLabels.add(labelKey);
+if (seenKeys.has(resultKey)) {
+  continue;
+}
+
+seenKeys.add(resultKey);
     suggestions.push(normalized);
   }
 
-const q = query.toLowerCase();
+const q = query.trim().toLowerCase();
 
 suggestions.sort((a, b) => {
   const score = (item: SearchResult) => {
