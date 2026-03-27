@@ -50,10 +50,10 @@ const curated = searchPopularPlaces(lookup, normalizedLimit);
 
     
     const cacheKey = getLocationSearchCacheKey(lookup, normalizedLimit);
-    const cached = cache.read<SearchResult[]>(cacheKey, LOCATION_SEARCH_TTL_MS);
-    if (Array.isArray(cached)) {
-      return cached;
-    }
+// const cached = cache.read<SearchResult[]>(cacheKey, LOCATION_SEARCH_TTL_MS);
+// if (Array.isArray(cached)) {
+//   return cached;
+// }
 
     const url =
       "https://nominatim.openstreetmap.org/search?" +
@@ -68,7 +68,7 @@ const curated = searchPopularPlaces(lookup, normalizedLimit);
     );
 
     const data = await response.json();
-const remoteResults = parseLocationResponseItems(data);
+const remoteResults = parseLocationResponseItems(data, lookup);
 
 const merged = dedupeResults([
   ...curated,
