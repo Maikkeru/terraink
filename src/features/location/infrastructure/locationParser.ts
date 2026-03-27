@@ -58,21 +58,45 @@ export function normalizeLocationResult(
     return null;
   }
 
-  const address = entry.address ?? {};
-  const city =
+const address = entry.address ?? {};
+
+function pickBestLocality(
+  address: Record<string, string>,
+  entry?: { city?: string }
+) {
+  return (
     pickFirstAddressValue(address, [
       "city",
       "town",
       "village",
-      "hamlet",
       "municipality",
+      "suburb",
+      "city_district",
+      "district",
+      "borough",
       "county",
+      "state_district",
+      "province",
       "state",
-    ]) || String(entry.city ?? "").trim();
+      "region",
+      "prefecture",
+      "oblast",
+      "voivodeship",
+      "governorate",
+      "department",
+      "canton",
+      "hamlet",
+    ]) ||
+    String(entry?.city ?? "").trim()
+  );
+}
+
+const city = pickBestLocality(address, entry);
   const country =
     pickFirstAddressValue(address, ["country"]) ||
     String(entry.country ?? "").trim();
-  const countryCode = pickFirstAddressValue(address, ["country_code"]).toUpperCase();
+ const rawCountryCode = pickFirstAddressValue(address, ["country_code"]);
+const countryCode = rawCountryCode ? rawCountryCode.toUpperCase() : "";
   const continent =
     pickFirstAddressValue(address, ["continent"]) ||
     inferContinentFromCoordinates(lat, lon);
