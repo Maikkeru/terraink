@@ -245,11 +245,15 @@ export function searchPopularPlaces(
         else if (text.includes(q)) score = Math.max(score, 400);
       }
 
+      if (score === 0) {
+        return null;
+      }
+
       score += place.popularity ?? 0;
 
       return { place, score };
     })
-    .filter((item) => item.score > 0)
+    .filter((item): item is { place: PopularPlace; score: number } => item !== null)
     .sort((a, b) => b.score - a.score)
     .slice(0, limit)
     .map(

@@ -9,6 +9,7 @@ interface NominatimEntry {
   city?: string;
   country?: string;
   address?: Record<string, string>;
+  importance?: number | string;
 }
 
 function inferContinentFromCoordinates(lat: number, lon: number): string {
@@ -42,11 +43,13 @@ export function normalizeLocationResult(
   fallbackLabel = "",
 ): SearchResult | null {
   if (!entry || typeof entry !== "object") {
+    
     return null;
   }
 
   const lat = Number(entry.lat);
   const lon = Number(entry.lon);
+  
   if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
     return null;
   }
@@ -102,18 +105,22 @@ const countryCode = rawCountryCode ? rawCountryCode.toUpperCase() : "";
     inferContinentFromCoordinates(lat, lon);
 
   return {
-    id: String(entry.place_id ?? label),
-    label,
-    city,
-    country,
-    countryCode,
-    continent,
-    lat,
-    lon,
-  };
+  id: String(entry.place_id ?? label),
+  label,
+  city,
+  country,
+  countryCode,
+  continent,
+  lat,
+  lon,
+  importance: Number(entry.importance ?? 0),
+};
 }
 
-export function parseLocationResponseItems(payload: unknown): SearchResult[] {
+export function parseLocationResponseItems(
+  payload: unknown,
+  query: string
+): SearchResult[] {
   const entries = Array.isArray(payload) ? (payload as NominatimEntry[]) : [];
   const suggestions: SearchResult[] = [];
   const seenLabels = new Set<string>();
@@ -132,6 +139,42 @@ export function parseLocationResponseItems(payload: unknown): SearchResult[] {
     seenLabels.add(labelKey);
     suggestions.push(normalized);
   }
+
+const q = query.toLowerCase();
+
+suggestions.sort((a, b) => {
+  const score = (item: SearchResult) => {
+  let s = 0;
+
+  const label = item.label.toLowerCase();
+  const city = (item.city || "").toLowerCase();
+
+  // Primary name match
+  if (label.split(",")[0] === q) s += 150;
+
+  // Strong intent matching
+  if (label === q) s += 200;
+  else if (label.startsWith(q)) s += 120;
+  else if (label.includes(q)) s += 80;
+
+  if (city === q) s += 100;
+  else if (city.startsWith(q)) s += 70;
+
+  // Data quality
+  if (item.countryCode) s += 10;
+
+   if (typeof item.importance === "number") {
+    s += item.importance * 100;
+  }
+
+  // Prefer cleaner labels
+  s -= label.length * 0.1;
+
+  return s;
+};
+
+  return score(b) - score(a);
+});
 
   return suggestions;
 }
