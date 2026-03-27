@@ -15,9 +15,21 @@ import {
   getLocationSearchCacheKey,
   getReverseGeocodeCacheKey,
 } from "@/features/map/infrastructure/cacheKeys";
+import { searchPopularPlaces } from "./popularPlaces";
 
 // Deduplicate concurrent reverse geocode requests for the same coordinates
 const inFlightReverseRequests = new Map<string, Promise<SearchResult>>();
+
+function dedupeResults(results: SearchResult[]): SearchResult[] {
+  const seen = new Set<string>();
+
+  return results.filter((result) => {
+    const key = `${result.label}|${result.lat}|${result.lon}`.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
 
 export function createNominatimAdapter(
   http: IHttp,
@@ -28,11 +40,15 @@ export function createNominatimAdapter(
     limit = 6,
   ): Promise<SearchResult[]> {
     const lookup = String(query ?? "").trim();
-    if (lookup.length < 2) {
-      return [];
-    }
+if (lookup.length < 2) {
+  return [];
+}
 
-    const normalizedLimit = Math.max(1, Math.min(Math.round(limit), 10));
+const normalizedLimit = Math.max(1, Math.min(Math.round(limit), 10));
+const curated = searchPopularPlaces(lookup, normalizedLimit);
+    
+
+    
     const cacheKey = getLocationSearchCacheKey(lookup, normalizedLimit);
     const cached = cache.read<SearchResult[]>(cacheKey, LOCATION_SEARCH_TTL_MS);
     if (Array.isArray(cached)) {
@@ -52,9 +68,15 @@ export function createNominatimAdapter(
     );
 
     const data = await response.json();
-    const results = parseLocationResponseItems(data);
-    cache.write(cacheKey, results);
-    return results;
+const remoteResults = parseLocationResponseItems(data);
+
+const merged = dedupeResults([
+  ...curated,
+  ...remoteResults,
+]).slice(0, normalizedLimit);
+
+cache.write(cacheKey, merged);
+return merged;
   }
 
   async function geocodeLocation(query: string): Promise<SearchResult> {
