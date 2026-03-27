@@ -449,6 +449,155 @@
           "minor_low": "#CCCCDA"
         }
       }
+    },
+    "midnight": {
+      "name": "Midnight",
+      "description": "Deep dark map with cool blue highlights and high contrast roads.",
+      "ui": {
+  "bg": "#0B0F1A",
+  "text": "#E6F1FF"
+},
+"map": {
+  "land": "#0B0F1A",
+  "water": "#0A1A2F",
+  "waterway": "#0A1A2F",
+  "parks": "#0F2A1F",
+  "buildings": "#1C2233",
+  "aeroway": "#2A2F45",
+  "rail": "#3A3F5A",
+  "roads": {
+    "major": "#4DA3FF",
+    "path": "#2B6CB0",
+    "outline": "#1A3A66",
+    "minor_high": "#3B82F6",
+    "minor_mid": "#2563EB",
+    "minor_low": "#1D4ED8"
+  }
+}
+    },"desert_gold": {
+  "name": "Desert Gold",
+  "description": "Warm sandstone terrain with sunlit gold roads and dry earth contrast.",
+  "ui": {
+    "bg": "#F3E2B3",
+    "text": "#5B4522"
+  },
+  "map": {
+    "land": "#F3E2B3",
+    "water": "#A9D6E5",
+    "waterway": "#A9D6E5",
+    "parks": "#CBBF7A",
+    "buildings": "#D8B97E",
+    "aeroway": "#C8AA6E",
+    "rail": "#8A6A3D",
+    "roads": {
+      "major": "#C6922B",
+      "path": "#D8A94A",
+      "outline": "#E8C97A",
+      "minor_high": "#B88325",
+      "minor_mid": "#A06F20",
+      "minor_low": "#7E5719"
     }
+  }
+},
+"arctic_blue": {
+  "name": "Arctic Blue",
+  "description": "Icy white base with glacial blue waterways and crisp steel-blue roadwork.",
+  "ui": {
+    "bg": "#EAF4FB",
+    "text": "#1E3A5F"
+  },
+  "map": {
+    "land": "#EAF4FB",
+    "water": "#9FD3F2",
+    "waterway": "#9FD3F2",
+    "parks": "#D7EEF3",
+    "buildings": "#C7DCE8",
+    "aeroway": "#AFC7D6",
+    "rail": "#6D89A3",
+    "roads": {
+      "major": "#3E7CBF",
+      "path": "#6CA6D9",
+      "outline": "#B7D8F0",
+      "minor_high": "#4E8FD1",
+      "minor_mid": "#3876B6",
+      "minor_low": "#285A8E"
+    }
+  }
+},
+"neon_city": {
+  "name": "Neon City",
+  "description": "Electric cyberpunk palette with deep shadows and glowing magenta-cyan transit lines.",
+  "ui": {
+    "bg": "#0A0B14",
+    "text": "#E8F7FF"
+  },
+  "map": {
+    "land": "#0A0B14",
+    "water": "#111C2E",
+    "waterway": "#111C2E",
+    "parks": "#10251C",
+    "buildings": "#1A1F33",
+    "aeroway": "#2A2340",
+    "rail": "#FF4FD8",
+    "roads": {
+      "major": "#27D3FF",
+      "path": "#B84CFF",
+      "outline": "#2B4F7A",
+      "minor_high": "#00B8FF",
+      "minor_mid": "#2C7CFF",
+      "minor_low": "#1F4ED8"
+    }
+  }
+},
+"stone_ivory": {
+  "name": "Stone Ivory",
+  "description": "Soft mineral neutrals with restrained gray-brown roads and museum-style clarity.",
+  "ui": {
+    "bg": "#F4F1E8",
+    "text": "#4D463C"
+  },
+  "map": {
+    "land": "#F4F1E8",
+    "water": "#D7E3E8",
+    "waterway": "#D7E3E8",
+    "parks": "#D8DCCB",
+    "buildings": "#CFC6B8",
+    "aeroway": "#B8B1A5",
+    "rail": "#7C7467",
+    "roads": {
+      "major": "#9B8E7A",
+      "path": "#B0A28D",
+      "outline": "#D8D0C2",
+      "minor_high": "#8B7E6B",
+      "minor_mid": "#756956",
+      "minor_low": "#5C5244"
+    }
+  }
+},
+"sunset_ember": {
+  "name": "Sunset Ember",
+  "description": "Dusky plum and ember-orange tones inspired by late light over a dense city grid.",
+  "ui": {
+    "bg": "#1A1324",
+    "text": "#FFE8D6"
+  },
+  "map": {
+    "land": "#1A1324",
+    "water": "#2B1F3D",
+    "waterway": "#2B1F3D",
+    "parks": "#3A2A2F",
+    "buildings": "#4A3242",
+    "aeroway": "#5A4156",
+    "rail": "#FF9E6D",
+    "roads": {
+      "major": "#FF7A45",
+      "path": "#FFB067",
+      "outline": "#7A4A3A",
+      "minor_high": "#F56A3A",
+      "minor_mid": "#D9552E",
+      "minor_low": "#A63F25"
+    }
+  }
+}
   }
 }
