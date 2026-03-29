@@ -20,6 +20,7 @@ import { parseHex } from "@/shared/utils/color";
 interface PosterTextOverlayProps {
   city: string;
   country: string;
+  primaryName?: string;
   lat: number;
   lon: number;
   fontFamily: string;
@@ -38,6 +39,7 @@ interface PosterTextOverlayProps {
 export default function PosterTextOverlay({
   city,
   country,
+  primaryName,
   lat,
   lon,
   fontFamily,
@@ -56,7 +58,14 @@ export default function PosterTextOverlay({
     ? `"${fontFamily}", "IBM Plex Mono", monospace`
     : '"IBM Plex Mono", monospace';
 
-  const cityLabel = formatCityLabel(city);
+  
+
+const cityLabel = formatCityLabel(primaryName || city);
+
+const localityLabel =
+  primaryName.toLowerCase() === city.toLowerCase()
+    ? ""
+    : city;
 
   const cityLen = Math.max(city.length, 1);
   const cityBaseSize = toCqMin(CITY_FONT_BASE_PX);

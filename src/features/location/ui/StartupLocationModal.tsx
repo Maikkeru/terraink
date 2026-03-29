@@ -18,15 +18,20 @@ import { useLocationAutocomplete } from "@/features/location/application/useLoca
 import type { SearchResult } from "@/features/location/domain/types";
 
 const CLOSE_ANIMATION_MS = 220;
-const DEFAULT_LOCATION_LABEL = "Hanover, Region Hannover, Lower Saxony, Germany";
+const DEFAULT_LOCATION_LABEL =
+  "Hanover, Region Hannover, Lower Saxony, Germany";
 
 interface PendingLocation {
+  id: string;
   label: string;
+  primaryName: string;
   lat: number;
   lon: number;
   city: string;
   country: string;
+  countryCode: string;
   continent: string;
+  importance?: number;
 }
 
 interface StartupLocationModalProps {
@@ -41,11 +46,16 @@ export default function StartupLocationModal({
   const [isClosing, setIsClosing] = useState(false);
   const [locationInput, setLocationInput] = useState("");
   const [isInputFocused, setIsInputFocused] = useState(false);
-  const [pendingLocation, setPendingLocation] = useState<PendingLocation | null>(null);
+  const [pendingLocation, setPendingLocation] =
+    useState<PendingLocation | null>(null);
   const [isResolving, setIsResolving] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { locationSuggestions, isLocationSearching, clearLocationSuggestions, searchNow } =
-    useLocationAutocomplete(locationInput, isInputFocused);
+  const {
+    locationSuggestions,
+    isLocationSearching,
+    clearLocationSuggestions,
+    searchNow,
+  } = useLocationAutocomplete(locationInput, isInputFocused);
 
   const showSuggestions = isInputFocused && locationSuggestions.length > 0;
 
@@ -89,16 +99,20 @@ export default function StartupLocationModal({
         displayContinent: location.continent,
       },
     });
+
     dispatch({
       type: "SET_USER_LOCATION",
       location: {
-        id: `startup:${location.lat.toFixed(6)},${location.lon.toFixed(6)}`,
+        id: location.id,
         label: location.label,
+        primaryName: location.primaryName,
         city: location.city,
         country: location.country,
+        countryCode: location.countryCode,
         continent: location.continent,
         lat: location.lat,
         lon: location.lon,
+        importance: location.importance ?? 0,
       },
     });
   };
@@ -116,9 +130,10 @@ export default function StartupLocationModal({
         maxAttempts: 2,
       });
 
-      if (!positionResult.ok) {
+      if (positionResult.ok === false) {
+        const { reason } = positionResult;
         setErrorMessage(
-          getGeolocationFailureMessage(positionResult.reason, {
+          getGeolocationFailureMessage(reason, {
             includeManualFallback: true,
           }),
         );
@@ -129,27 +144,42 @@ export default function StartupLocationModal({
       const { lat, lon } = positionResult;
       try {
         const resolved = await reverseGeocodeCoordinates(lat, lon);
+        const resolvedLabel =
+          String(resolved.label ?? "").trim() ||
+          `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
+
         const pending: PendingLocation = {
-          label:
-            String(resolved.label ?? "").trim() ||
-            `${lat.toFixed(6)}, ${lon.toFixed(6)}`,
+          id: String(
+            resolved.id ?? `startup:${lat.toFixed(6)},${lon.toFixed(6)}`,
+          ),
+          label: resolvedLabel,
+          primaryName:
+            String(resolved.primaryName ?? "").trim() ||
+            resolvedLabel.split(",")[0].trim(),
           lat,
           lon,
           city: String(resolved.city ?? "").trim(),
           country: String(resolved.country ?? "").trim(),
+          countryCode: String(resolved.countryCode ?? "").trim(),
           continent: String(resolved.continent ?? "").trim(),
+          importance:
+            typeof resolved.importance === "number" ? resolved.importance : 0,
         };
         setPendingLocation(pending);
         setLocationInput(pending.label);
       } catch {
         const label = `${lat.toFixed(6)}, ${lon.toFixed(6)}`;
         const pending: PendingLocation = {
+          id: `startup:${lat.toFixed(6)},${lon.toFixed(6)}`,
           label,
+          primaryName: label,
           lat,
           lon,
           city: "",
           country: "",
+          countryCode: "",
           continent: "",
+          importance: 0,
         };
         setPendingLocation(pending);
         setLocationInput(label);
@@ -161,12 +191,17 @@ export default function StartupLocationModal({
 
   const onSuggestionSelect = (suggestion: SearchResult) => {
     setPendingLocation({
+      id: suggestion.id,
       label: suggestion.label,
+      primaryName:
+        suggestion.primaryName || suggestion.label.split(",")[0].trim(),
       lat: suggestion.lat,
       lon: suggestion.lon,
       city: suggestion.city,
       country: suggestion.country,
+      countryCode: suggestion.countryCode || "",
       continent: String(suggestion.continent ?? "").trim(),
+      importance: suggestion.importance ?? 0,
     });
     setLocationInput(suggestion.label);
     setIsInputFocused(false);
@@ -199,12 +234,17 @@ export default function StartupLocationModal({
     try {
       const resolved = await geocodeLocation(query);
       applyResolvedLocation({
+        id: resolved.id,
         label: resolved.label,
+        primaryName:
+          resolved.primaryName || resolved.label.split(",")[0].trim(),
         lat: resolved.lat,
         lon: resolved.lon,
         city: resolved.city,
         country: resolved.country,
+        countryCode: resolved.countryCode || "",
         continent: String(resolved.continent ?? "").trim(),
+        importance: resolved.importance ?? 0,
       });
       closeModal();
     } catch {
@@ -247,7 +287,9 @@ export default function StartupLocationModal({
           }}
           onFocus={() => setIsInputFocused(true)}
           onBlur={() => setTimeout(() => setIsInputFocused(false), 120)}
-          onKeyDown={(e) => { if (e.key === "Enter") void searchNow(e.currentTarget.value); }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") void searchNow(e.currentTarget.value);
+          }}
           placeholder="Type a city or place"
           autoComplete="off"
         />
@@ -268,7 +310,9 @@ export default function StartupLocationModal({
               </li>
             ))}
             {isLocationSearching ? (
-              <li className="startup-location-suggestion-status">Searching...</li>
+              <li className="startup-location-suggestion-status">
+                Searching...
+              </li>
             ) : null}
           </ul>
         ) : null}

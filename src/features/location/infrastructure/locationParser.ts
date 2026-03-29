@@ -128,6 +128,7 @@ export function normalizeLocationResult(
   entry: NominatimEntry | null | undefined,
   fallbackLabel = "",
 ): SearchResult | null {
+  
   if (!entry || typeof entry !== "object") {
     
     return null;

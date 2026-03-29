@@ -438,6 +438,7 @@ export default function PreviewPanel() {
           <PosterTextOverlay
             city={cityLabel}
             country={countryLabel}
+            primaryName={state.selectedLocation?.primaryName || cityLabel}
             lat={formLat}
             lon={formLon}
             fontFamily={form.fontFamily}
@@ -481,12 +482,16 @@ export default function PreviewPanel() {
                       className={`map-control-btn${isRotationEnabled ? " is-active" : ""}`}
                       onClick={handleToggleRotation}
                       title={
-                        isRotationEnabled ? "Disable rotation" : "Enable rotation"
+                        isRotationEnabled
+                          ? "Disable rotation"
+                          : "Enable rotation"
                       }
                     >
                       <RotateIcon />
                       <span>
-                        {isRotationEnabled ? "Disable Rotation" : "Enable Rotation"}
+                        {isRotationEnabled
+                          ? "Disable Rotation"
+                          : "Enable Rotation"}
                       </span>
                     </button>
                   ) : null}
@@ -498,12 +503,16 @@ export default function PreviewPanel() {
                       className={`map-control-btn${isRotationEnabled ? " is-active" : ""}`}
                       onClick={handleToggleRotation}
                       title={
-                        isRotationEnabled ? "Disable rotation" : "Enable rotation"
+                        isRotationEnabled
+                          ? "Disable rotation"
+                          : "Enable rotation"
                       }
                     >
                       <RotateIcon />
                       <span>
-                        {isRotationEnabled ? "Disable Rotation" : "Enable Rotation"}
+                        {isRotationEnabled
+                          ? "Disable Rotation"
+                          : "Enable Rotation"}
                       </span>
                     </button>
                   </div>
