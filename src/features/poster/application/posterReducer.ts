@@ -197,6 +197,7 @@ export function posterReducer(
       return {
         ...state,
         userLocation: action.location,
+        selectedLocation: action.location,
       };
 
     case "CLEAR_LOCATION":
@@ -258,7 +259,11 @@ export function posterReducer(
                 id: marker.id,
                 size:
                   typeof action.changes.size === "number"
-                    ? clamp(action.changes.size, MIN_MARKER_SIZE, MAX_MARKER_SIZE)
+                    ? clamp(
+                        action.changes.size,
+                        MIN_MARKER_SIZE,
+                        MAX_MARKER_SIZE,
+                      )
                     : marker.size,
               }
             : marker,
@@ -268,9 +273,13 @@ export function posterReducer(
     case "REMOVE_MARKER":
       return {
         ...state,
-        markers: state.markers.filter((marker) => marker.id !== action.markerId),
+        markers: state.markers.filter(
+          (marker) => marker.id !== action.markerId,
+        ),
         activeMarkerId:
-          state.activeMarkerId === action.markerId ? null : state.activeMarkerId,
+          state.activeMarkerId === action.markerId
+            ? null
+            : state.activeMarkerId,
       };
 
     case "CLEAR_MARKERS":
@@ -294,7 +303,8 @@ export function posterReducer(
       };
 
     case "REMOVE_CUSTOM_MARKER_ICON": {
-      const fallbackIconId = featuredMarkerIcons[0]?.id ?? state.markers[0]?.iconId ?? "pin";
+      const fallbackIconId =
+        featuredMarkerIcons[0]?.id ?? state.markers[0]?.iconId ?? "pin";
       return {
         ...state,
         customMarkerIcons: state.customMarkerIcons.filter(
@@ -309,8 +319,11 @@ export function posterReducer(
     }
 
     case "CLEAR_CUSTOM_MARKER_ICONS": {
-      const fallbackIconId = featuredMarkerIcons[0]?.id ?? state.markers[0]?.iconId ?? "pin";
-      const customIconIdSet = new Set(state.customMarkerIcons.map((icon) => icon.id));
+      const fallbackIconId =
+        featuredMarkerIcons[0]?.id ?? state.markers[0]?.iconId ?? "pin";
+      const customIconIdSet = new Set(
+        state.customMarkerIcons.map((icon) => icon.id),
+      );
       return {
         ...state,
         customMarkerIcons: [],
