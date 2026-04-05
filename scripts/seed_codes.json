@@ -1,10 +1,20 @@
 {
   "countries": ["US", "DE", "JP", "CA", "AU"],
   "subdivisions": [
-    "US-NM", "US-CA", "US-NY", "US-TX",
-    "DE-BE", "DE-NI", "DE-BY",
-    "JP-13", "JP-27", "JP-26", "JP-01",
-    "CA-ON", "CA-QC",
-    "AU-NSW", "AU-VIC"
+    "US-NM",
+    "US-CA",
+    "US-NY",
+    "US-TX",
+    "DE-BE",
+    "DE-NI",
+    "DE-BY",
+    "JP-13",
+    "JP-27",
+    "JP-26",
+    "JP-01",
+    "CA-ON",
+    "CA-QC",
+    "AU-NSW",
+    "AU-VIC"
   ]
 }
