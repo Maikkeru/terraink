@@ -1,4 +1,5 @@
 import type { Location, SearchResult } from "../domain/types";
+import { resolveFlagPaletteKey } from "@/features/theme/domain/flagResolver";
 
 interface NominatimEntry {
   lat?: number | string;
@@ -195,7 +196,9 @@ export function normalizeLocationResult(
     "state_district",
   ]) || "";
 
-  const regionCode = mapRegionToCode(countryCode, region);
+  const paletteKey = resolveFlagPaletteKey(address);
+const regionCode =
+  paletteKey && paletteKey !== countryCode ? paletteKey : "";
   const continent =
     pickFirstAddressValue(address, ["continent"]) ||
     inferContinentFromCountryCode(countryCode) ||
