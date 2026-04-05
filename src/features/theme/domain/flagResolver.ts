@@ -267,54 +267,63 @@ const UK_SUBDIVISIONS: Record<string, string> = {
   "northern ireland": "NIR",
 };
 
-const FRANCE_SUBDIVISIONS: Record<string, string> = {
-  "ile de france": "IDF",
-  "île de france": "IDF",
-  idf: "IDF",
-  "nouvelle aquitaine": "NAQ",
-  occitanie: "OCC",
-  "provence alpes cote dazur": "PAC",
-  "provence-alpes-cote d'azur": "PAC",
-  "provence alpes cote d azur": "PAC",
-  "provence-alpes-côte d'azur": "PAC",
-  "auvergne rhone alpes": "ARA",
-  "auvergne-rhone-alpes": "ARA",
-  "auvergne-rhône-alpes": "ARA",
-};
-
-const ITALY_SUBDIVISIONS: Record<string, string> = {
-  lazio: "LAZ",
-  lombardy: "LOM",
-  lombardia: "LOM",
-  sicily: "SIC",
-  sicilia: "SIC",
-  tuscany: "TOS",
-  toscana: "TOS",
-  veneto: "VEN",
-};
-
 const SPAIN_SUBDIVISIONS: Record<string, string> = {
-  andalusia: "AN",
   andalucia: "AN",
   andalucía: "AN",
+  aragon: "AR",
+  aragón: "AR",
+  asturias: "AS",
+  canarias: "CN",
+  "canary islands": "CN",
+  cantabria: "CB",
+  "castilla y leon": "CL",
+  "castilla y león": "CL",
+  "castile and leon": "CL",
+  "castilla la mancha": "CM",
+  "castilla-la mancha": "CM",
   catalonia: "CT",
   catalunya: "CT",
-  cataluña: "CT",
-  madrid: "MD",
-  valencia: "VC",
-  "comunitat valenciana": "VC",
-  "comunidad valenciana": "VC",
+  extremadura: "EX",
   galicia: "GA",
+  "balearic islands": "IB",
+  "islas baleares": "IB",
+  "la rioja": "RI",
+  madrid: "MD",
+  murcia: "MC",
+  navarra: "NC",
+  "basque country": "PV",
+  "pais vasco": "PV",
+  "país vasco": "PV",
+  valencia: "VC",
+  "valencian community": "VC",
+  ceuta: "CE",
+  melilla: "ML",
 };
 
 const BELGIUM_SUBDIVISIONS: Record<string, string> = {
-  flanders: "VLG",
-  vlaanderen: "VLG",
-  wallonia: "WAL",
-  wallonie: "WAL",
-  brussels: "BRU",
-  "brussels capital region": "BRU",
-  "brussels-capital region": "BRU",
+  antwerp: "VAN",
+  antwerpen: "VAN",
+
+  "flemish brabant": "VBR",
+  "vlaams brabant": "VBR",
+
+  limburg: "VLI",
+
+  "east flanders": "VOV",
+  "oost vlaanderen": "VOV",
+
+  "west flanders": "VWV",
+  "west vlaanderen": "VWV",
+
+  "walloon brabant": "WBR",
+  "brabant wallon": "WBR",
+
+  hainaut: "WHT",
+  liege: "WLG",
+  liège: "WLG",
+
+  luxembourg: "WLX", // belgium context
+  namur: "WNA",
 };
 
 const NETHERLANDS_SUBDIVISIONS: Record<string, string> = {
@@ -389,21 +398,74 @@ const NORWAY_SUBDIVISIONS: Record<string, string> = {
 };
 
 const DENMARK_SUBDIVISIONS: Record<string, string> = {
-  "capital region of denmark": "84",
-  hovedstaden: "84",
-  "central denmark region": "82",
+  "north jutland": "81",
+  nordjylland: "81",
+
+  "central jutland": "82",
   midtjylland: "82",
-  "region of southern denmark": "83",
+
+  "southern denmark": "83",
   syddanmark: "83",
+
+  "capital region": "84",
+  hovedstaden: "84",
+  copenhagen: "84",
+
+  zealand: "85",
+  sjælland: "85",
+};
+
+const LUXEMBOURG_SUBDIVISIONS: Record<string, string> = {
+  capellen: "CA",
+  clervaux: "CL",
+  diekirch: "DI",
+  echternach: "EC",
+  "esch sur alzette": "ES",
+  "esch-sur-alzette": "ES",
+  grevenmacher: "GR",
+  luxembourg: "LU",
+  mersch: "ME",
+  redange: "RD",
+  remich: "RM",
+  vianden: "VD",
+  wiltz: "WI",
 };
 
 const FINLAND_SUBDIVISIONS: Record<string, string> = {
+  aland: "01",
+  åland: "01",
+
   uusimaa: "18",
-  åland: "1",
-  aland: "1",
+  helsinki: "18",
+
+  lapland: "10",
+  lappi: "10",
+
+  pirkanmaa: "11",
+  tampere: "11",
+
+  "south karelia": "02",
+  "north karelia": "13",
+
+  "south ostrobothnia": "03",
+  "north ostrobothnia": "14",
+  ostrobothnia: "12",
+
+  kainuu: "05",
+  satakunta: "17",
+  "central finland": "08",
+
+  "south savonia": "04",
+  "north savonia": "15",
+
+  "paijat hame": "16",
+  "päijät häme": "16",
+
+  "kanta hame": "06",
+  "kanta häme": "06",
+
+  kymenlaakso: "09",
   "southwest finland": "19",
-  "varsinais suomi": "19",
-  "varsinais-suomi": "19",
 };
 
 const ICELAND_SUBDIVISIONS: Record<string, string> = {};
@@ -430,18 +492,140 @@ const POLAND_SUBDIVISIONS: Record<string, string> = {
 
 const CZECH_SUBDIVISIONS: Record<string, string> = {
   prague: "10",
-  "central bohemian": "20",
+  praha: "10",
+
+  "central bohemia": "20",
+  stredocesky: "20",
+  středočeský: "20",
+
+  "south bohemia": "31",
+  jihocesky: "31",
+  jihočeský: "31",
+
+  plzen: "32",
+  plzensky: "32",
+  plzeňský: "32",
+
+  karlovy: "41",
+  karlovarsky: "41",
+
+  usti: "42",
+  ustecky: "42",
+  ústecký: "42",
+
+  liberec: "51",
+  liberecky: "51",
+
+  hradec: "52",
+  kralovehradecky: "52",
+
+  pardubice: "53",
+  pardubicky: "53",
+
+  vysocina: "63",
+
+  brno: "64",
+  jihomoravsky: "64",
+
+  olomouc: "71",
+  olomoucky: "71",
+
+  zlin: "72",
+  zlinsky: "72",
+
+  ostrava: "80",
+  moravskoslezsky: "80",
 };
 
 const SLOVAKIA_SUBDIVISIONS: Record<string, string> = {
   bratislava: "BL",
+  bratislavsky: "BL",
+  bratislavský: "BL",
+
+  trnava: "TA",
+  trnavsky: "TA",
+  trnavský: "TA",
+
+  trencin: "TC",
+  trenčín: "TC",
+  trenciansky: "TC",
+  trenčiansky: "TC",
+
+  nitra: "NI",
+  nitriansky: "NI",
+  nitrianský: "NI",
+
+  zilina: "ZI",
+  žilina: "ZI",
+  zilinsky: "ZI",
+  žilinský: "ZI",
+
+  "banska bystrica": "BC",
+  banskobystricky: "BC",
+  banskobystrický: "BC",
+
+  presov: "PV",
+  prešov: "PV",
+  presovsky: "PV",
+  prešovský: "PV",
+
   kosice: "KI",
   košice: "KI",
+  kosicky: "KI",
+  košický: "KI",
 };
 
 const HUNGARY_SUBDIVISIONS: Record<string, string> = {
   budapest: "BU",
+
+  baranya: "BA",
+  "bacs kiskun": "BK",
+  "bács kiskun": "BK",
+
+  bekes: "BE",
+  békés: "BE",
+
+  borsod: "BZ",
+  "borsod abauj zemplen": "BZ",
+  "borsod-abaúj-zemplén": "BZ",
+
+  csongrad: "CS",
+  "csongrad csanad": "CS",
+  "csongrád-csanád": "CS",
+
+  fejer: "FE",
+  fejér: "FE",
+
+  gyor: "GS",
+  győr: "GS",
+  "gyor moson sopron": "GS",
+
+  hajdu: "HB",
+  "hajdú bihar": "HB",
+
+  heves: "HE",
+
+  jasz: "JN",
+  "jász nagykun szolnok": "JN",
+
+  komarom: "KE",
+  "komárom esztergom": "KE",
+
+  nograd: "NO",
+  nógrád: "NO",
+
   pest: "PE",
+
+  somogy: "SO",
+
+  szabolcs: "SZ",
+  "szabolcs szatmar bereg": "SZ",
+
+  tolna: "TO",
+  vas: "VA",
+  veszprem: "VE",
+  veszprém: "VE",
+  zala: "ZA",
 };
 
 const ROMANIA_SUBDIVISIONS: Record<string, string> = {
@@ -644,6 +828,266 @@ const LITHUANIA_SUBDIVISIONS: Record<string, string> = {
   vilnius: "VL",
 };
 
+const FRANCE_SUBDIVISIONS: Record<string, string> = {
+  "auvergne rhone alpes": "ARA",
+  "auvergne-rhone-alpes": "ARA",
+  "auvergne-rhône-alpes": "ARA",
+  "bourgogne franche comte": "BFC",
+  "bourgogne-franche-comte": "BFC",
+  "bourgogne-franche-comté": "BFC",
+  bretagne: "BRE",
+  brittany: "BRE",
+  "centre val de loire": "CVL",
+  "centre-val de loire": "CVL",
+  corse: "COR",
+  corsica: "COR",
+  "grand est": "GES",
+  "hauts de france": "HDF",
+  "hauts-de-france": "HDF",
+  "ile de france": "IDF",
+  "île de france": "IDF",
+  idf: "IDF",
+  normandie: "NOR",
+  normandy: "NOR",
+  "nouvelle aquitaine": "NAQ",
+  "nouvelle-aquitaine": "NAQ",
+  occitanie: "OCC",
+  "pays de la loire": "PDL",
+  "provence alpes cote dazur": "PAC",
+  "provence-alpes-cote d'azur": "PAC",
+  "provence alpes cote d azur": "PAC",
+  "provence-alpes-côte d'azur": "PAC",
+
+  guadeloupe: "GP",
+  guyane: "GF",
+  "french guiana": "GF",
+  martinique: "MQ",
+  mayotte: "MT",
+  reunion: "RE",
+  "la reunion": "RE",
+  "la réunion": "RE",
+  "saint barthelemy": "BL",
+  "saint barthélemy": "BL",
+  "saint martin": "MF",
+  "french polynesia": "PF",
+  "polynesie francaise": "PF",
+  "polynésie française": "PF",
+  "new caledonia": "NC",
+  "nouvelle caledonie": "NC",
+  "nouvelle-calédonie": "NC",
+  "saint pierre and miquelon": "PM",
+  "saint-pierre-et-miquelon": "PM",
+  "french southern territories": "TF",
+  "terres australes francaises": "TF",
+  "terres australes françaises": "TF",
+  "wallis and futuna": "WF",
+  "wallis-et-futuna": "WF",
+  clipperton: "CP",
+};
+
+const ITALY_SUBDIVISIONS: Record<string, string> = {
+  piedmont: "21",
+  piemonte: "21",
+  "aosta valley": "23",
+  "valle daosta": "23",
+  "valle d'aosta": "23",
+  lombardy: "25",
+  lombardia: "25",
+  "trentino south tyrol": "32",
+  "trentino-south tyrol": "32",
+  "trentino alto adige": "32",
+  "trentino-alto adige": "32",
+  veneto: "34",
+  "friuli venezia giulia": "36",
+  liguria: "42",
+  "emilia romagna": "45",
+  "emilia-romagna": "45",
+  tuscany: "52",
+  toscana: "52",
+  umbria: "55",
+  marche: "57",
+  lazio: "62",
+  abruzzo: "65",
+  molise: "67",
+  campania: "72",
+  apulia: "75",
+  puglia: "75",
+  basilicata: "77",
+  calabria: "78",
+  sicily: "82",
+  sicilia: "82",
+  sardinia: "88",
+  sardegna: "88",
+};
+const JAPAN_SUBDIVISIONS: Record<string, string> = {
+  hokkaido: "01",
+  "hokkaido prefecture": "01",
+
+  aomori: "02",
+  "aomori prefecture": "02",
+
+  iwate: "03",
+  "iwate prefecture": "03",
+
+  miyagi: "04",
+  "miyagi prefecture": "04",
+
+  akita: "05",
+  "akita prefecture": "05",
+
+  yamagata: "06",
+  "yamagata prefecture": "06",
+
+  fukushima: "07",
+  "fukushima prefecture": "07",
+
+  ibaraki: "08",
+  "ibaraki prefecture": "08",
+
+  tochigi: "09",
+  "tochigi prefecture": "09",
+
+  gunma: "10",
+  "gunma prefecture": "10",
+
+  saitama: "11",
+  "saitama prefecture": "11",
+
+  chiba: "12",
+  "chiba prefecture": "12",
+
+  tokyo: "13",
+  "tokyo metropolis": "13",
+  "tokyo prefecture": "13",
+  "tokyo to": "13",
+
+  kanagawa: "14",
+  "kanagawa prefecture": "14",
+
+  niigata: "15",
+  "niigata prefecture": "15",
+
+  toyama: "16",
+  "toyama prefecture": "16",
+
+  ishikawa: "17",
+  "ishikawa prefecture": "17",
+
+  fukui: "18",
+  "fukui prefecture": "18",
+
+  yamanashi: "19",
+  "yamanashi prefecture": "19",
+
+  nagano: "20",
+  "nagano prefecture": "20",
+
+  gifu: "21",
+  "gifu prefecture": "21",
+
+  shizuoka: "22",
+  "shizuoka prefecture": "22",
+
+  aichi: "23",
+  "aichi prefecture": "23",
+
+  mie: "24",
+  "mie prefecture": "24",
+
+  shiga: "25",
+  "shiga prefecture": "25",
+
+  kyoto: "26",
+  "kyoto prefecture": "26",
+
+  osaka: "27",
+  "osaka prefecture": "27",
+
+  hyogo: "28",
+  hyōgo: "28",
+  "hyogo prefecture": "28",
+
+  nara: "29",
+  "nara prefecture": "29",
+
+  wakayama: "30",
+  "wakayama prefecture": "30",
+
+  tottori: "31",
+  "tottori prefecture": "31",
+
+  shimane: "32",
+  "shimane prefecture": "32",
+
+  okayama: "33",
+  "okayama prefecture": "33",
+
+  hiroshima: "34",
+  "hiroshima prefecture": "34",
+
+  yamaguchi: "35",
+  "yamaguchi prefecture": "35",
+
+  tokushima: "36",
+  "tokushima prefecture": "36",
+
+  kagawa: "37",
+  "kagawa prefecture": "37",
+
+  ehime: "38",
+  "ehime prefecture": "38",
+
+  kochi: "39",
+  kōchi: "39",
+  "kochi prefecture": "39",
+
+  fukuoka: "40",
+  "fukuoka prefecture": "40",
+
+  saga: "41",
+  "saga prefecture": "41",
+
+  nagasaki: "42",
+  "nagasaki prefecture": "42",
+
+  kumamoto: "43",
+  "kumamoto prefecture": "43",
+
+  oita: "44",
+  ōita: "44",
+  "oita prefecture": "44",
+
+  miyazaki: "45",
+  "miyazaki prefecture": "45",
+
+  kagoshima: "46",
+  "kagoshima prefecture": "46",
+
+  okinawa: "47",
+  "okinawa prefecture": "47"
+};
+
+const KOREA_SUBDIVISIONS: Record<string, string> = {
+  seoul: "11",
+  busan: "26",
+  daegu: "27",
+  incheon: "28",
+  gwangju: "29",
+  daejeon: "30",
+  ulsan: "31",
+  sejong: "50",
+
+  gyeonggi: "41",
+  gangwon: "42",
+  chungbuk: "43",
+  chungnam: "44",
+  jeonbuk: "45",
+  jeonnam: "46",
+  gyeongbuk: "47",
+  gyeongnam: "48",
+  jeju: "49",
+};
+
 function normalizeLookupValue(value?: string): string {
   return (value ?? "")
     .normalize("NFD")
@@ -657,11 +1101,9 @@ function normalizeLookupValue(value?: string): string {
 
 function getCountryCode(address?: NominatimAddress): string {
   const rawCountryCode = (address?.country_code ?? "").trim().toUpperCase();
-  if (
-    rawCountryCode === "US" ||
-    rawCountryCode === "CA" ||
-    rawCountryCode === "MX"
-  ) {
+
+  // If Nominatim already gave us a valid ISO code, use it directly
+  if (rawCountryCode.length === 2) {
     return rawCountryCode;
   }
 
@@ -730,6 +1172,9 @@ function mapSubdivisionToAbbr(countryCode: string, rawValue?: string): string {
     EE: ESTONIA_SUBDIVISIONS,
     LV: LATVIA_SUBDIVISIONS,
     LT: LITHUANIA_SUBDIVISIONS,
+    LU: LUXEMBOURG_SUBDIVISIONS,
+    JP: JAPAN_SUBDIVISIONS,
+    KR: KOREA_SUBDIVISIONS,
   };
 
   const table = byCountry[countryCode];
