@@ -1064,7 +1064,7 @@ const JAPAN_SUBDIVISIONS: Record<string, string> = {
   "kagoshima prefecture": "46",
 
   okinawa: "47",
-  "okinawa prefecture": "47"
+  "okinawa prefecture": "47",
 };
 
 const KOREA_SUBDIVISIONS: Record<string, string> = {
@@ -1086,6 +1086,125 @@ const KOREA_SUBDIVISIONS: Record<string, string> = {
   gyeongbuk: "47",
   gyeongnam: "48",
   jeju: "49",
+};
+
+const TAIWAN_SUBDIVISIONS: Record<string, string> = {
+  taiwan: "TW",
+  tw: "TW",
+  "republic of china": "TW",
+  "republic of china taiwan": "TW",
+  changhua: "CHA",
+  "changhua county": "CHA",
+
+  chiayi: "CYQ",
+  "chiayi county": "CYQ",
+  "chiayi city": "CYI",
+
+  hsinchu: "HSQ",
+  "hsinchu county": "HSQ",
+  "hsinchu city": "HSZ",
+
+  hualien: "HUA",
+  "hualien county": "HUA",
+
+  yilan: "ILA",
+  ilan: "ILA",
+  "yilan county": "ILA",
+  "ilan county": "ILA",
+
+  keelung: "KEE",
+  "keelung city": "KEE",
+
+  kaohsiung: "KHH",
+  "kaohsiung city": "KHH",
+
+  kinmen: "KIN",
+  "kinmen county": "KIN",
+
+  lienchiang: "LIE",
+  matsu: "LIE",
+  "lienchiang county": "LIE",
+  "matsu islands": "LIE",
+
+  miaoli: "MIA",
+  "miaoli county": "MIA",
+
+  nantou: "NAN",
+  "nantou county": "NAN",
+
+  "new taipei": "NWT",
+  "new taipei city": "NWT",
+
+  penghu: "PEN",
+  "penghu county": "PEN",
+
+  pingtung: "PIF",
+  "pingtung county": "PIF",
+
+  taoyuan: "TAO",
+  "taoyuan city": "TAO",
+
+  tainan: "TNN",
+  "tainan city": "TNN",
+
+  taipei: "TPE",
+  "taipei city": "TPE",
+
+  taitung: "TTT",
+  "taitung county": "TTT",
+
+  taichung: "TXG",
+  "taichung city": "TXG",
+
+  yunlin: "YUN",
+  "yunlin county": "YUN",
+};
+
+const CHINA_SUBDIVISIONS: Record<string, string> = {
+  beijing: "BJ",
+  shanghai: "SH",
+  tianjin: "TJ",
+  chongqing: "CQ",
+
+  guangdong: "GD",
+  guangxi: "GX",
+  guizhou: "GZ",
+  fujian: "FJ",
+  zhejiang: "ZJ",
+  jiangsu: "JS",
+  jiangxi: "JX",
+
+  shandong: "SD",
+  henan: "HA",
+  hebei: "HE",
+  hubei: "HB",
+  hunan: "HN",
+
+  shanxi: "SX",
+  shaanxi: "SN",
+
+  liaoning: "LN",
+  jilin: "JL",
+  heilongjiang: "HL",
+
+  sichuan: "SC",
+  yunnan: "YN",
+  qinghai: "QH",
+  gansu: "GS",
+
+  hainan: "HI",
+  anhui: "AH",
+
+  xinjiang: "XJ",
+  tibet: "XZ",
+  xizang: "XZ",
+
+  "inner mongolia": "NM",
+  ningxia: "NX",
+
+  "hong kong": "HK",
+  "macau": "MO",
+  macao: "MO"
 };
 
 function normalizeLookupValue(value?: string): string {
@@ -1175,6 +1294,8 @@ function mapSubdivisionToAbbr(countryCode: string, rawValue?: string): string {
     LU: LUXEMBOURG_SUBDIVISIONS,
     JP: JAPAN_SUBDIVISIONS,
     KR: KOREA_SUBDIVISIONS,
+    TW: TAIWAN_SUBDIVISIONS,
+    CN: CHINA_SUBDIVISIONS,
   };
 
   const table = byCountry[countryCode];
