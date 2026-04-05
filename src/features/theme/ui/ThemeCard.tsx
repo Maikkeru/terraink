@@ -9,6 +9,7 @@ interface ThemeCardProps {
   onClick?: () => void;
   isSelected?: boolean;
   showFullPalette?: boolean;
+  paletteOverride?: string[];
 }
 
 export default function ThemeCard({
@@ -16,6 +17,7 @@ export default function ThemeCard({
   onClick,
   isSelected = false,
   showFullPalette = false,
+  paletteOverride,
 }: ThemeCardProps) {
   if (!themeOption) {
     return null;
@@ -30,15 +32,23 @@ export default function ThemeCard({
         "map.roads.minor_high",
         "map.roads.minor_mid",
       ];
+
   const majorPaletteIndices = majorPaletteKeys
     .map((key) => DISPLAY_PALETTE_KEYS.indexOf(key))
     .filter((index) => index >= 0);
-  const palette = Array.isArray(themeOption.palette)
+
+  const sourcePalette =
+    Array.isArray(paletteOverride) && paletteOverride.length > 0
+      ? paletteOverride
+      : themeOption.palette;
+
+  const palette = Array.isArray(sourcePalette)
     ? majorPaletteIndices
-        .map((index) => themeOption.palette[index])
+        .map((index) => sourcePalette[index])
         .filter((color): color is string => Boolean(color))
         .filter((color, index, colors) => colors.indexOf(color) === index)
     : [];
+
   const className = ["theme-card", isSelected ? "is-selected" : ""]
     .filter(Boolean)
     .join(" ");

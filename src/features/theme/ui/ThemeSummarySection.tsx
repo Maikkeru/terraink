@@ -2,6 +2,8 @@ import type { RefObject } from "react";
 import ThemeCard from "./ThemeCard";
 import { EditIcon } from "@/shared/ui/Icons";
 import type { ThemeOption } from "../domain/types";
+import { usePosterContext } from "@/features/poster/ui/PosterContext";
+import { getThemePalette } from "../infrastructure/themeRepository";
 
 interface ThemeSummarySectionProps {
   listRef?: RefObject<HTMLDivElement>;
@@ -20,6 +22,12 @@ export default function ThemeSummarySection({
   onThemeSelect,
   onCustomize,
 }: ThemeSummarySectionProps) {
+    const { state, effectiveTheme } = usePosterContext();
+
+  const liveFlagPalette =
+    state.form.theme === "flag_themed"
+      ? getThemePalette(effectiveTheme)
+      : undefined;
   const description =
     selectedThemeOption.description?.trim() || "No description available.";
 
@@ -50,14 +58,17 @@ export default function ThemeSummarySection({
         aria-label="Theme options"
         ref={listRef}
       >
-        {themeOptions.map((themeOption) => (
-          <ThemeCard
-            key={themeOption.id}
-            themeOption={themeOption}
-            isSelected={themeOption.id === selectedThemeId}
-            onClick={() => onThemeSelect(themeOption.id)}
-          />
-        ))}
+{themeOptions.map((themeOption) => (
+  <ThemeCard
+    key={themeOption.id}
+    themeOption={themeOption}
+    isSelected={themeOption.id === selectedThemeId}
+    onClick={() => onThemeSelect(themeOption.id)}
+    paletteOverride={
+      themeOption.id === "flag_themed" ? liveFlagPalette : undefined
+    }
+  />
+))}
       </div>
     </div>
   );

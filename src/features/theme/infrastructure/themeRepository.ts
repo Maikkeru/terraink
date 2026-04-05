@@ -6,6 +6,17 @@ import { getThemeColorByPath } from "../domain/colorPaths";
 import type { ResolvedTheme, ThemeColorKey, ThemeOption } from "../domain/types";
 import { DISPLAY_PALETTE_KEYS } from "../domain/types";
 
+
+const preferredThemeOrder = [
+  "midnight_blue",
+  "void_gold",
+  "royal_sapphire",
+  "solar_flare",
+  "earth_system",
+];
+
+const dynamicFlagThemeName = "flag_themed";
+
 const hexColorPattern =
   /^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/;
 const rgbColorPattern =
@@ -104,17 +115,6 @@ const referenceAliases: Record<string, string> = {
   road_outline: "map.roads.outline",
 };
 
-const preferredThemeOrder = [
-  "midnight_blue",
-  "terracotta",
-  "neon",
-  "coral",
-  "heatwave",
-  "ruby",
-  "sage",
-  "copper",
-  "rustic",
-];
 
 function isObject(value: unknown): value is ThemeObject {
   return typeof value === "object" && value !== null;
@@ -293,7 +293,17 @@ const remainingThemeNames = discoveredThemeNames.filter(
   (id) => !preferredThemeOrder.includes(id),
 );
 
-export const themeNames = [...preferredThemeNames, ...remainingThemeNames];
+export const themeNames = [
+  dynamicFlagThemeName,
+  ...preferredThemeNames,
+  ...remainingThemeNames,
+];
+
+const preferredDefaultThemeName = "midnight_blue";
+
+export const defaultThemeName = themeNames.includes(preferredDefaultThemeName)
+  ? preferredDefaultThemeName
+  : (themeNames[0] ?? preferredDefaultThemeName);
 
 export function getThemePalette(theme: unknown): string[] {
   const normalizedTheme = normalizeTheme(theme);
@@ -302,25 +312,36 @@ export function getThemePalette(theme: unknown): string[] {
   ).filter((color) => isCssColor(color));
 }
 
-export const themeOptions: ThemeOption[] = themeNames.map((name) => ({
-  id: name,
-  name: String(getPathValue(themesByName[name], "name") ?? name),
-  description: String(getPathValue(themesByName[name], "description") ?? ""),
-  palette: getThemePalette(themesByName[name]),
-}));
+export const themeOptions: ThemeOption[] = themeNames.map((name) => {
+  if (name === dynamicFlagThemeName) {
+    const previewTheme = themesByName[defaultThemeName]
+      ? normalizeTheme(themesByName[defaultThemeName])
+      : normalizeTheme(fallbackTheme);
 
-const preferredDefaultThemeName = "midnight_blue";
+    return {
+      id: dynamicFlagThemeName,
+      name: "Flag Themed",
+      description: "Dynamically generated from regional flag colors.",
+      palette: getThemePalette(previewTheme),
+    };
+  }
 
-export const defaultThemeName = themeNames.includes(preferredDefaultThemeName)
-  ? preferredDefaultThemeName
-  : (themeNames[0] ?? preferredDefaultThemeName);
+  return {
+    id: name,
+    name: String(getPathValue(themesByName[name], "name") ?? name),
+    description: String(getPathValue(themesByName[name], "description") ?? ""),
+    palette: getThemePalette(themesByName[name]),
+  };
+});
 
 export function getTheme(themeName: string): ResolvedTheme {
   if (themesByName[themeName]) {
     return normalizeTheme(themesByName[themeName]);
   }
+
   if (defaultThemeName && themesByName[defaultThemeName]) {
     return normalizeTheme(themesByName[defaultThemeName]);
   }
+
   return normalizeTheme(fallbackTheme);
 }

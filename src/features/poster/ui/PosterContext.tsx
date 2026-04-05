@@ -40,6 +40,7 @@ import {
   DEFAULT_LAT,
   DEFAULT_LON,
 } from "@/core/config";
+import { generateFlagTheme } from "@/features/theme/domain/generateFlagTheme";
 
 const defaultLayoutOption = getLayoutOption(defaultLayoutId);
 const defaultLayoutWidthCm = Number(
@@ -124,10 +125,26 @@ export function PosterProvider({ children }: { children: ReactNode }) {
   // Set initial position from browser geolocation (or Hanover fallback)
   useGeolocation(dispatch);
 
-  const selectedTheme = useMemo(
-    () => getTheme(state.form.theme),
-    [state.form.theme],
-  );
+const selectedTheme = useMemo(() => {
+  if (state.form.theme !== "flag_themed") {
+    return getTheme(state.form.theme);
+  }
+
+  const activeLocation = state.selectedLocation ?? state.userLocation;
+
+  if (!activeLocation?.countryCode) {
+    return getTheme(defaultThemeName);
+  }
+
+  return generateFlagTheme({
+    countryCode: activeLocation.countryCode,
+    stateCode: activeLocation.regionCode,
+  });
+}, [
+  state.form.theme,
+  state.selectedLocation,
+  state.userLocation,
+]);
 
   const effectiveTheme = useMemo(() => {
     if (Object.keys(state.customColors).length === 0) {

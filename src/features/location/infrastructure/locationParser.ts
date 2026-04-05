@@ -124,6 +124,34 @@ function pickBestLocality(
 function extractPrimaryName(label: string): string {
   return label.split(",")[0]?.trim() ?? "";
 }
+
+function mapRegionToCode(countryCode: string, region: string): string {
+  const normalized = region.toLowerCase();
+
+  if (countryCode === "US") {
+    const usMap: Record<string, string> = {
+      "new mexico": "US-NM",
+      "california": "US-CA",
+      "texas": "US-TX",
+      "new york": "US-NY",
+    };
+
+    return usMap[normalized] || "";
+  }
+
+  if (countryCode === "DE") {
+    const deMap: Record<string, string> = {
+      "lower saxony": "DE-NI",
+      "bavaria": "DE-BY",
+      "berlin": "DE-BE",
+    };
+
+    return deMap[normalized] || "";
+  }
+
+  return "";
+}
+
 export function normalizeLocationResult(
   entry: NominatimEntry | null | undefined,
   fallbackLabel = "",
@@ -148,6 +176,7 @@ export function normalizeLocationResult(
     return null;
   }
 
+
   const address = entry.address ?? {};
   const primaryName = extractPrimaryName(label);
 
@@ -158,24 +187,34 @@ export function normalizeLocationResult(
 
   const rawCountryCode = pickFirstAddressValue(address, ["country_code"]);
   const countryCode = rawCountryCode ? rawCountryCode.toUpperCase() : "";
+  const region =
+  pickFirstAddressValue(address, [
+    "state",
+    "region",
+    "province",
+    "state_district",
+  ]) || "";
 
+  const regionCode = mapRegionToCode(countryCode, region);
   const continent =
     pickFirstAddressValue(address, ["continent"]) ||
     inferContinentFromCountryCode(countryCode) ||
     inferContinentFromCoordinates(lat, lon);
 
   return {
-    id: String(entry.place_id ?? label),
-    label,
-    primaryName,
-    city,
-    country,
-    countryCode,
-    continent,
-    lat,
-    lon,
-    importance: Number(entry.importance ?? 0),
-  };
+  id: String(entry.place_id ?? label),
+  label,
+  primaryName,
+  city,
+  country,
+  countryCode,
+  region,
+  regionCode,
+  continent,
+  lat,
+  lon,
+  importance: Number(entry.importance ?? 0),
+};
 }
 
 export function parseLocationResponseItems(
