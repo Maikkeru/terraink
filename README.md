@@ -37,6 +37,50 @@ This project is a JavaScript reimplementation inspired by the original MapToPost
 - **Detailed map layers** — roads, water bodies, parks, and building footprints with per-layer styling
 - **Typography controls** — set city/country display labels and load any Google Fonts family
 - **High-resolution PNG export** — download a print-ready poster at any defined dimension
+## Iterative Improvements
+
+These updates were introduced after hands-on testing of TerraInk’s core features. While using the app, several limitations became clear around geocoding accuracy, location labeling, and theme flexibility. The changes below address those issues directly and are designed to remain consistent with the project’s architecture and long-term maintainability goals.
+
+### Location Parsing
+
+- Improved handling of Nominatim responses
+- Clear separation between:
+  - Primary label (city or local area)
+  - Secondary label (country)
+- Better support for edge cases such as stations, districts, and ambiguous results
+
+### Flag-Based Theme System
+
+- Added dynamic themes based on real-world flag colors
+- Supports:
+  - Country-level palettes
+  - Subdivision palettes (states, provinces, prefectures) where applicable
+- Falls back to country-level themes when no subdivision data is available
+
+### Region Coverage
+
+- Expanded flag palette data across:
+  - North America
+  - East Asia
+  - South Asia
+  - Southeast Asia
+- Subdivisions are only included when they provide distinct visual value
+
+### Data Structure
+
+- Moved to a flat JSON format for palette storage
+- Improves:
+  - Lookup speed
+  - Simplicity of resolver logic
+  - Maintainability
+
+### Theme Resolution
+
+Theme selection follows a consistent hierarchy:
+
+```text
+location → region → country → fallback theme
+
 
 ## Data Providers and Mapping Stack
 
